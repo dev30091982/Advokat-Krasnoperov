@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Календарь дел</h1>
+<div id="calendar"></div>
+<h3>Добавить событие</h3>
+<form method="post" action="{{ url_for('add_event') }}">
+    <div class="row">
+        <div class="col"><input type="text" name="title" placeholder="Название" class="form-control" required></div>
+        <div class="col"><select name="event_type" class="form-select"><option value="court">Судебное заседание</option><option value="meeting">Встреча</option><option value="deadline">Дедлайн</option></select></div>
+        <div class="col"><input type="datetime-local" name="start_time" class="form-control" required></div>
+        <div class="col"><input type="datetime-local" name="end_time" class="form-control"></div>
+        <div class="col"><input type="text" name="location" placeholder="Место" class="form-control"></div>
+        <div class="col"><button type="submit" class="btn btn-primary">Добавить</button></div>
+    </div>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: '/api/events',
+        eventClick: function(info) { alert(info.event.title + '\n' + (info.event.extendedProps.description || '')); }
+    });
+    calendar.render();
+});
+</script>
+{% endblock %}
